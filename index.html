@@ -13,171 +13,90 @@
 </head>
 <body>
 <p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="de"&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
 <p class="p1">&lt;head&gt;</p>
-<p class="p1">&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1">&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</p>
-<p class="p1">&lt;title&gt;Freisteller mit Overlay und Hintergrund&lt;/title&gt;</p>
-<p class="p1">&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>canvas { border: 1px solid #ccc; max-width: 100%; height: auto; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>#controls { margin-bottom: 10px; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>button { margin-top: 10px; padding: 10px 20px; font-size: 16px; }</p>
-<p class="p1">&lt;/style&gt;</p>
-<p class="p1">&lt;script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0/dist/tf.min.js"&gt;&lt;/script&gt;</p>
-<p class="p1">&lt;script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.2.0/dist/body-pix.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Profilbild Freisteller&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative; /* Sicherstellen, dass z-index funktioniert */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>#background {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>left: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image: url('https://raw.githubusercontent.com/Ichkannes/profilbild-overlay/main/background.jpg');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-size: cover;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-position: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: -1; /* Hintergrund bleibt hinter dem Inhalt */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>canvas {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ccc;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
 <p class="p1">&lt;/head&gt;</p>
 <p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="background"&gt;&lt;/div&gt;</p>
 <p class="p2"><br></p>
-<p class="p1">&lt;h1&gt;Profilbild freistellen mit Hintergrund und Overlay&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Profilbild freistellen mit Hintergrund und Overlay&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;canvas id="canvas"&gt;&lt;/canvas&gt; &lt;!-- Keine feste Breite/Höhe hier --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;br&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="file" id="fileInput" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="downloadBtn"&gt;Bild herunterladen&lt;/button&gt;</p>
 <p class="p2"><br></p>
-<p class="p1">&lt;div id="controls"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;input type="file" id="upload" accept="image/*" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button id="processBtn" disabled&gt;Bild verarbeiten&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button id="downloadBtn" disabled&gt;Bild herunterladen&lt;/button&gt;</p>
-<p class="p1">&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const canvas = document.getElementById('canvas');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const ctx = canvas.getContext('2d');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const fileInput = document.getElementById('fileInput');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const downloadBtn = document.getElementById('downloadBtn');</p>
 <p class="p2"><br></p>
-<p class="p1">&lt;canvas id="canvas" width="400" height="400"&gt;&lt;/canvas&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>fileInput.addEventListener('change', (event) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const file = event.target.files[0];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!file) return;</p>
 <p class="p2"><br></p>
-<p class="p1">&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const upload = document.getElementById('upload');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const processBtn = document.getElementById('processBtn');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const downloadBtn = document.getElementById('downloadBtn');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const canvas = document.getElementById('canvas');</p>
-<p class="p1"><span class="Apple-converted-space">  </span>const ctx = canvas.getContext('2d');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const img = new Image();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>img.onload = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Dynamisch Canvas-Größe anpassen</p>
+<p class="p1"><span class="Apple-converted-space">                </span>canvas.width = img.width;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>canvas.height = img.height;</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>let userImage = new Image();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let overlayImage = new Image();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let backgroundImage = new Image();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let net = null;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>let imgLoaded = false;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Zeichne das hochgeladene Bild auf das Canvas</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.drawImage(img, 0, 0, img.width, img.height);</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>// Overlay und Hintergrund als transparente PNGs (ersetze URLs durch deine eigenen!)</p>
-<p class="p1"><span class="Apple-converted-space">  </span>overlayImage.src = ' <a href="https://github.com/Ichkannes/profilbild-overlay/blob/main/Magenta%20Cyan%20Neongr%C3%BCn%20Digital%20Glitch%20Gaming%20Twitch%20Webcam-Overlay%20(2000%20x%202000%20px).png">https://github.com/Ichkannes/profilbild-overlay/blob/main/Magenta%20Cyan%20Neongrün%20Digital%20Glitch%20Gaming%20Twitch%20Webcam-Overlay%20(2000%20x%202000%20px).png</a> ' ;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>backgroundImage.src = ' <a href="https://github.com/Ichkannes/profilbild-overlay/blob/main/Background.jpg">https://github.com/Ichkannes/profilbild-overlay/blob/main/Background.jpg</a> ' ;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Overlay hinzufügen</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const overlay = new Image();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>overlay.src = 'https://raw.githubusercontent.com/Ichkannes/profilbild-overlay/main/overlay.png';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>overlay.onload = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Überprüfen, ob das Overlay geladen wurde</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.drawImage(overlay, 0, 0, img.width, img.height);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>};</p>
+<p class="p1"><span class="Apple-converted-space">                </span>overlay.onerror = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>alert("Fehler beim Laden des Overlays!");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>img.onerror = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert("Fehler beim Laden des Bildes!");</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>img.src = URL.createObjectURL(file);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
 <p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>upload.addEventListener('change', () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const file = upload.files[0];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!file) return;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const reader = new FileReader();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>reader.onload = e =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>userImage = new Image();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>userImage.onload = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>imgLoaded = true;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>processBtn.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>downloadBtn.disabled = true;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>ctx.clearRect(0, 0, canvas.width, canvas.height);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Einfach zur Vorschau ohne Freistellung das Bild zeigen</p>
-<p class="p1"><span class="Apple-converted-space">        </span>drawPreview();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p1"><span class="Apple-converted-space">      </span>userImage.src = e.target.result;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p1"><span class="Apple-converted-space">    </span>reader.readAsDataURL(file);</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>async function loadModel() {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>processBtn.textContent = 'Modell wird geladen...';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>net = await bodyPix.load();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>processBtn.textContent = 'Bild verarbeiten';</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>async function processImage() {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (!imgLoaded || !net) return;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>processBtn.disabled = true;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>downloadBtn.disabled = true;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Bild in Canvas skalieren (Quadrat 400x400)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const size = 400;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const minSide = Math.min(userImage.width, userImage.height);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sx = (userImage.width - minSide) / 2;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sy = (userImage.height - minSide) / 2;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Temporärer Canvas um das zugeschnittene Bild vorzubereiten</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const tempCanvas = document.createElement('canvas');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>tempCanvas.width = size;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>tempCanvas.height = size;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const tempCtx = tempCanvas.getContext('2d');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>tempCtx.drawImage(userImage, sx, sy, minSide, minSide, 0, 0, size, size);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Segmentation mit BodyPix</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const segmentation = await net.segmentPerson(tempCanvas, {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>internalResolution: 'medium',</p>
-<p class="p1"><span class="Apple-converted-space">      </span>segmentationThreshold: 0.7,</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Maske auf Canvas erzeugen</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const mask = bodyPix.toMask(segmentation, {r:0, g:0, b:0, a:0}, {r:0, g:0, b:0, a:255});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Canvas für Ergebnis vorbereiten</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.clearRect(0, 0, size, size);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Hintergrund zeichnen</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (backgroundImage.complete) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>ctx.drawImage(backgroundImage, 0, 0, size, size);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>backgroundImage.onload = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>ctx.drawImage(backgroundImage, 0, 0, size, size);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Freigestelltes Bild zeichnen (Benutzerbild * Maske)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Bilddaten aus tempCanvas holen</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const imgData = tempCtx.getImageData(0, 0, size, size);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const maskData = mask.data;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>for (let i = 0; i &lt; imgData.data.length; i += 4) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>// Alpha aus Maske</p>
-<p class="p1"><span class="Apple-converted-space">      </span>imgData.data[i + 3] = maskData[i + 3];</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.putImageData(imgData, 0, 0);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Overlay drüber</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (overlayImage.complete) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>ctx.drawImage(overlayImage, 0, 0, size, size);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>overlayImage.onload = () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>ctx.drawImage(overlayImage, 0, 0, size, size);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>};</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>downloadBtn.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>processBtn.disabled = false;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>function drawPreview() {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const size = 400;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.clearRect(0, 0, size, size);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Hintergrund zeichnen</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (backgroundImage.complete) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>ctx.drawImage(backgroundImage, 0, 0, size, size);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// User Bild (ohne Freistellung)</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const minSide = Math.min(userImage.width, userImage.height);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sx = (userImage.width - minSide) / 2;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const sy = (userImage.height - minSide) / 2;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>ctx.drawImage(userImage, sx, sy, minSide, minSide, 0, 0, size, size);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>// Overlay drüber</p>
-<p class="p1"><span class="Apple-converted-space">    </span>if (overlayImage.complete) {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>ctx.drawImage(overlayImage, 0, 0, size, size);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>downloadBtn.addEventListener('click', () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const link = document.createElement('a');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>link.download = 'freigestelltes-profilbild.png';</p>
-<p class="p1"><span class="Apple-converted-space">    </span>link.href = canvas.toDataURL('image/png');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>link.click();</p>
-<p class="p1"><span class="Apple-converted-space">  </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>processBtn.addEventListener('click', processImage);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>loadModel();</p>
-<p class="p1">&lt;/script&gt;</p>
-<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>downloadBtn.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const link = document.createElement('a');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>link.download = 'edited-image.png';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>link.href = canvas.toDataURL();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>link.click();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
 <p class="p1">&lt;/body&gt;</p>
 <p class="p1">&lt;/html&gt;</p>
 </body>
